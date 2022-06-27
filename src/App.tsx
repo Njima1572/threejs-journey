@@ -5,6 +5,24 @@ import gsap from 'gsap'
 function App() {
 
   useEffect(() => {
+    const sizes = {
+      width: 800,
+      height: 600
+    }
+
+    const aspectRatio = sizes.width / sizes.height
+
+    const cursor = {
+      x: 0,
+      y: 0
+    }
+
+    window.addEventListener('mousemove', (event) => {
+      cursor.x = event.clientX / sizes.width - 0.5
+      cursor.y = -(event.clientY / sizes.height - 0.5)
+      console.log(cursor)
+    })
+
     const canvas = document.querySelector('canvas.webgl')
     const scene = new THREE.Scene()
 
@@ -31,12 +49,6 @@ function App() {
     group.add(cube2)
     group.add(cube3)
 
-    const sizes = {
-      width: 800,
-      height: 600
-    }
-
-    const aspectRatio = sizes.width / sizes.height
 
     // First argument is field of view, 180 it will break
     // Second argument is aspect ratio
@@ -47,6 +59,7 @@ function App() {
     camera.position.z = 3
     camera.lookAt(group.position)
     scene.add(camera)
+
 
     // left, right, top, bottom, then near, far
     // const camera = new THREE.OrthographicCamera(
@@ -71,6 +84,15 @@ function App() {
 
       const tick = () => {
         const elapsedTime = clock.getElapsedTime()
+
+        // updateCamera
+        // camera.rotation.y = cursor.x
+        // camera.rotation.x = cursor.y
+        const amplitude = Math.PI * 2
+        camera.position.x = Math.sin(cursor.x * amplitude) * 3
+        camera.position.y = cursor.y * 5
+        camera.position.z = Math.cos(cursor.x * amplitude) * 3
+        camera.lookAt(group.position)
         // group.position.x = Math.cos(elapsedTime * Math.PI / 4)
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
