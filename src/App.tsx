@@ -12,7 +12,7 @@ function App() {
     mesh.position.x = 1 // Should move right for a unit
     mesh.position.y = -1 // Should move down for a unit
     // mesh.position is type of Vector3 : https://threejs.org/docs/#api/en/math/Vector3
-    
+
     // alternatively
     mesh.position.set(1, -1, 1)
     scene.add(mesh)
@@ -23,8 +23,14 @@ function App() {
     }
 
     const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+    camera.position.x = 0.5
+    camera.position.y = 0.5
     camera.position.z = 3
     scene.add(camera)
+
+    // Add Axes helper (red, green, blue)
+    const axesHelper = new THREE.AxesHelper()
+    scene.add(axesHelper)
 
     // distanceTo is Vector3 to Vector3
     console.log(mesh.position.distanceTo(camera.position)) // non-trivial, useable line for some use
