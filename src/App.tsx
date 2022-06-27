@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import * as THREE from 'three'
+import gsap from 'gsap'
 
 function App() {
 
@@ -49,11 +50,16 @@ function App() {
     const axesHelper = new THREE.AxesHelper()
     scene.add(axesHelper)
 
+
     if (canvas) {
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas
       })
       renderer.setSize(sizes.width, sizes.height)
+
+      // gsap has its own tick, but needs render.renderer
+      gsap.to(group.position, { duration: 1, delay: 1, x: 1 })
+      gsap.to(group.position, { duration: 1, delay: 2, x: 0 })
 
       const clock = new THREE.Clock()
 
@@ -62,7 +68,7 @@ function App() {
         // Time
         const elapsedTime = clock.getElapsedTime()
         // DONT use getDelta
-        group.rotation.x = elapsedTime * Math.PI / 4 
+        group.rotation.x = elapsedTime * Math.PI / 4
         camera.position.x = Math.cos(elapsedTime)
         camera.position.y = Math.sin(elapsedTime)
         camera.lookAt(group.position)
