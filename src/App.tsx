@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 
 function App() {
@@ -12,16 +13,16 @@ function App() {
 
     const aspectRatio = sizes.width / sizes.height
 
-    const cursor = {
-      x: 0,
-      y: 0
-    }
+    // const cursor = {
+    //   x: 0,
+    //   y: 0
+    // }
 
-    window.addEventListener('mousemove', (event) => {
-      cursor.x = event.clientX / sizes.width - 0.5
-      cursor.y = -(event.clientY / sizes.height - 0.5)
-      console.log(cursor)
-    })
+    // window.addEventListener('mousemove', (event) => {
+    //   cursor.x = event.clientX / sizes.width - 0.5
+    //   cursor.y = -(event.clientY / sizes.height - 0.5)
+    //   console.log(cursor)
+    // })
 
     const canvas = document.querySelector('canvas.webgl')
     const scene = new THREE.Scene()
@@ -76,6 +77,11 @@ function App() {
 
 
     if (canvas) {
+      const controls = new OrbitControls(camera, canvas)
+      controls.enableDamping = true
+      // controls.target.y = 2
+
+
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas
       })
@@ -88,12 +94,15 @@ function App() {
         // updateCamera
         // camera.rotation.y = cursor.x
         // camera.rotation.x = cursor.y
-        const amplitude = Math.PI * 2
-        camera.position.x = Math.sin(cursor.x * amplitude) * 3
-        camera.position.y = cursor.y * 5
-        camera.position.z = Math.cos(cursor.x * amplitude) * 3
-        camera.lookAt(group.position)
+        // const amplitude = Math.PI * 2
+        // camera.position.x = Math.sin(cursor.x * amplitude) * 3
+        // camera.position.y = cursor.y * 5
+        // camera.position.z = Math.cos(cursor.x * amplitude) * 3
+        // camera.lookAt(group.position)
         // group.position.x = Math.cos(elapsedTime * Math.PI / 4)
+
+        // Update controls
+        controls.update()
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
 
