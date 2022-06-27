@@ -48,6 +48,10 @@ function App() {
     // distanceTo is Vector3 to Vector3
     console.log(mesh.position.distanceTo(camera.position)) // non-trivial, useable line for some use
 
+    console.log(camera.position, camera.rotation)
+    camera.lookAt(mesh.position) // Changes the orientation of camera to look at mesh.position
+    console.log(camera.position, camera.rotation) // Position does not change
+
     // console.log(mesh.position.length())
     // mesh.position.normalize() // Shrink / expand until the length is 1
     // console.log(mesh.position.length()) // Should be 1
