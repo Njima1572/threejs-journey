@@ -55,9 +55,17 @@ function App() {
       })
       renderer.setSize(sizes.width, sizes.height)
 
+      let time = Date.now()
+
       // Animations
       const tick = () => {
-        group.rotation.x += 0.01
+        // Time
+        const currentTime = Date.now()
+        const delta = currentTime - time
+        time = currentTime
+        console.log(delta)
+
+        group.rotation.x += 0.001 * delta
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
       }
