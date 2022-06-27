@@ -9,6 +9,8 @@ function App() {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.x = 1 // Should move right for a unit
+    mesh.position.y = -1 // Should move down for a unit
     scene.add(mesh)
 
     const sizes = {
