@@ -40,13 +40,28 @@ function App() {
       height: 600
     }
 
+    const aspectRatio = sizes.width / sizes.height
+
     // First argument is field of view, 180 it will break
-    const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height)
-    camera.position.x = 0.5
-    camera.position.y = 0.5
-    camera.position.z = 3
-    camera.lookAt(group.position)
-    scene.add(camera)
+    // Second argument is aspect ratio
+    // Third: near, lower threshold
+    // Fourth: far, farther threhold
+    // Dont use extreme values. They introduce z-fighting
+    // const camera = new THREE.PerspectiveCamera(80, aspectRatio, 0.1, 100)
+    // camera.position.x = 0.5
+    // camera.position.y = 0.5
+    // camera.position.z = 3
+    // camera.lookAt(group.position)
+    // scene.add(camera)
+
+    // left, right, top, bottom, then near, far
+    const camera = new THREE.OrthographicCamera(
+      -1 * aspectRatio,
+      1 * aspectRatio,
+      -1 * aspectRatio,
+      1 * aspectRatio,
+      0.1, 100
+    )
 
     // Add Axes helper (red, green, blue)
     const axesHelper = new THREE.AxesHelper()
