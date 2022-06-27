@@ -62,7 +62,9 @@ function App() {
         // Time
         const elapsedTime = clock.getElapsedTime()
 
-        group.rotation.x = 1 * elapsedTime
+        group.rotation.x = elapsedTime * Math.PI / 4 
+        group.position.x = Math.cos(elapsedTime)
+        group.position.y = Math.sin(elapsedTime)
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
       }
