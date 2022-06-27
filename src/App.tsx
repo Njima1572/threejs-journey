@@ -40,10 +40,12 @@ function App() {
       height: 600
     }
 
-    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+    // First argument is field of view, 180 it will break
+    const camera = new THREE.PerspectiveCamera(80, sizes.width / sizes.height)
     camera.position.x = 0.5
     camera.position.y = 0.5
     camera.position.z = 3
+    camera.lookAt(group.position)
     scene.add(camera)
 
     // Add Axes helper (red, green, blue)
@@ -56,8 +58,18 @@ function App() {
         canvas: canvas
       })
       renderer.setSize(sizes.width, sizes.height)
-      renderer.render(scene, camera)
+      const clock = new THREE.Clock()
+
+      const tick = () => {
+        const elapsedTime = clock.getElapsedTime()
+        group.position.x = Math.cos(elapsedTime * Math.PI / 4)
+        renderer.render(scene, camera)
+        window.requestAnimationFrame(tick)
+
+      }
+      tick()
     }
+
 
   }, [])
 
