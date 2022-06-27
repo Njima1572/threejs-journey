@@ -6,29 +6,32 @@ function App() {
   useEffect(() => {
     const canvas = document.querySelector('canvas.webgl')
     const scene = new THREE.Scene()
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    const mesh = new THREE.Mesh(geometry, material)
-    // mesh.position.x = 1 // Should move right for a unit
-    // mesh.position.y = -1 // Should move down for a unit
-    // mesh.position is type of Vector3 : https://threejs.org/docs/#api/en/math/Vector3
 
-    // alternatively
-    mesh.position.set(1, 0, 1)
-    scene.add(mesh)
+    const group = new THREE.Group()
+    scene.add(group)
 
-    // Changes after adding the mesh to scene, also applies as long as it is before render
-    mesh.scale.x = 2
+    const cube1 = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    )
+    const cube2 = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+    )
+    const cube3 = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: 0x0000ff })
+    )
 
-    // TO rotate, we can use either rotation or quaternion
-    // Uses 2pi = 360
-    // The order matters
-    mesh.rotation.reorder("XYZ") // Defaults to XYZ and do it before changing rotation
-    mesh.rotation.x = Math.PI / 2 // should be 60 degrees by x axis
-    mesh.rotation.y = Math.PI / 4 // should be 60 degrees by x axis
-    mesh.rotation.z = Math.PI / 4 // should be 60 degrees by x axis
+    cube2.position.x = -2
+    cube3.position.x = 2
 
-    // OR use quaternion instead to avoid gimbal lock
+    group.add(cube1)
+    group.add(cube2)
+    group.add(cube3)
+
+    group.rotation.x = 1
+
 
     const sizes = {
       width: 800,
@@ -45,12 +48,8 @@ function App() {
     const axesHelper = new THREE.AxesHelper()
     scene.add(axesHelper)
 
-    // distanceTo is Vector3 to Vector3
-    console.log(mesh.position.distanceTo(camera.position)) // non-trivial, useable line for some use
+    // Create a group to run operation on items within group
 
-    console.log(camera.position, camera.rotation)
-    camera.lookAt(mesh.position) // Changes the orientation of camera to look at mesh.position
-    console.log(camera.position, camera.rotation) // Position does not change
 
     // console.log(mesh.position.length())
     // mesh.position.normalize() // Shrink / expand until the length is 1
