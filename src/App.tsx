@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import * as THREE from 'three'
+import gsap from 'gsap'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
     group.rotation.x = 1
 
 
+
     const sizes = {
       width: 800,
       height: 600
@@ -48,19 +50,33 @@ function App() {
     const axesHelper = new THREE.AxesHelper()
     scene.add(axesHelper)
 
-    // Create a group to run operation on items within group
-
-
-    // console.log(mesh.position.length())
-    // mesh.position.normalize() // Shrink / expand until the length is 1
-    // console.log(mesh.position.length()) // Should be 1
 
     if (canvas) {
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas
       })
       renderer.setSize(sizes.width, sizes.height)
-      renderer.render(scene, camera)
+
+      // gsap has its own tick, but needs render.renderer
+      gsap.to(group.position, { duration: 1, delay: 1, x: 1 })
+      gsap.to(group.position, { duration: 1, delay: 2, x: 0 })
+
+      const clock = new THREE.Clock()
+
+      // Animations
+      const tick = () => {
+        // Time
+        const elapsedTime = clock.getElapsedTime()
+        // DONT use getDelta
+        group.rotation.x = elapsedTime * Math.PI / 4
+        camera.position.x = Math.cos(elapsedTime)
+        camera.position.y = Math.sin(elapsedTime)
+        camera.lookAt(group.position)
+        renderer.render(scene, camera)
+        window.requestAnimationFrame(tick)
+      }
+
+      tick()
     }
 
   }, [])
