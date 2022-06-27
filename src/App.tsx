@@ -31,10 +31,6 @@ function App() {
     group.add(cube2)
     group.add(cube3)
 
-    group.rotation.x = 1
-
-
-
     const sizes = {
       width: 800,
       height: 600
@@ -47,21 +43,19 @@ function App() {
     // Third: near, lower threshold
     // Fourth: far, farther threhold
     // Dont use extreme values. They introduce z-fighting
-    // const camera = new THREE.PerspectiveCamera(80, aspectRatio, 0.1, 100)
-    // camera.position.x = 0.5
-    // camera.position.y = 0.5
-    // camera.position.z = 3
-    // camera.lookAt(group.position)
-    // scene.add(camera)
+    const camera = new THREE.PerspectiveCamera(80, aspectRatio, 0.1, 100)
+    camera.position.z = 3
+    camera.lookAt(group.position)
+    scene.add(camera)
 
     // left, right, top, bottom, then near, far
-    const camera = new THREE.OrthographicCamera(
-      -1 * aspectRatio,
-      1 * aspectRatio,
-      -1 * aspectRatio,
-      1 * aspectRatio,
-      0.1, 100
-    )
+    // const camera = new THREE.OrthographicCamera(
+    //   -1 * aspectRatio,
+    //   1 * aspectRatio,
+    //   -1 * aspectRatio,
+    //   1 * aspectRatio,
+    //   0.1, 100
+    // )
 
     // Add Axes helper (red, green, blue)
     const axesHelper = new THREE.AxesHelper()
@@ -77,7 +71,7 @@ function App() {
 
       const tick = () => {
         const elapsedTime = clock.getElapsedTime()
-        group.position.x = Math.cos(elapsedTime * Math.PI / 4)
+        // group.position.x = Math.cos(elapsedTime * Math.PI / 4)
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
 
