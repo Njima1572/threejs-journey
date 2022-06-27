@@ -33,6 +33,7 @@ function App() {
     group.rotation.x = 1
 
 
+
     const sizes = {
       width: 800,
       height: 600
@@ -48,19 +49,20 @@ function App() {
     const axesHelper = new THREE.AxesHelper()
     scene.add(axesHelper)
 
-    // Create a group to run operation on items within group
-
-
-    // console.log(mesh.position.length())
-    // mesh.position.normalize() // Shrink / expand until the length is 1
-    // console.log(mesh.position.length()) // Should be 1
-
     if (canvas) {
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas
       })
       renderer.setSize(sizes.width, sizes.height)
-      renderer.render(scene, camera)
+
+      // Animations
+      const tick = () => {
+        group.rotation.x += 0.01
+        renderer.render(scene, camera)
+        window.requestAnimationFrame(tick)
+      }
+
+      tick()
     }
 
   }, [])
