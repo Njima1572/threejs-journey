@@ -55,17 +55,14 @@ function App() {
       })
       renderer.setSize(sizes.width, sizes.height)
 
-      let time = Date.now()
+      const clock = new THREE.Clock()
 
       // Animations
       const tick = () => {
         // Time
-        const currentTime = Date.now()
-        const delta = currentTime - time
-        time = currentTime
-        console.log(delta)
+        const elapsedTime = clock.getElapsedTime()
 
-        group.rotation.x += 0.001 * delta
+        group.rotation.x = 1 * elapsedTime
         renderer.render(scene, camera)
         window.requestAnimationFrame(tick)
       }
