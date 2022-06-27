@@ -8,11 +8,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gsap": "^3.10.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "three": "^0.141.0"
   },
   "devDependencies": {
+    "@types/gsap": "^3.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/three": "^0.141.0",
