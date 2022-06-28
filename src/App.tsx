@@ -6,8 +6,6 @@ import gsap from 'gsap'
 
 function App() {
 
-  console.log(window.devicePixelRatio)
-
   useEffect(() => {
     const sizes = {
       width: window.innerWidth,
@@ -99,6 +97,25 @@ function App() {
         camera.updateProjectionMatrix()
 
         renderer.setSize(sizes.width, sizes.height)
+
+      })
+
+
+      window.addEventListener('dblclick', () => {
+        const fullScreenElement = document.fullScreenElement || document.webkitFullscreenElement
+        if (!fullScreenElement) {
+          if (canvas.requestFullscreen) {
+            canvas.requestFullscreen()
+          } else if (canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen()
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen()
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+          }
+        }
 
       })
 
