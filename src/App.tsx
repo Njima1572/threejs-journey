@@ -32,8 +32,8 @@ function App() {
     scene.add(group)
 
     const cube1 = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+      new THREE.BoxGeometry(1, 1, 1, 2, 2, 3),
+      new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
     )
     const cube2 = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),
@@ -41,7 +41,7 @@ function App() {
     )
     const cube3 = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0x0000ff })
+      new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
     )
 
     cube2.position.x = -2
