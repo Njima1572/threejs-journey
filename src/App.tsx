@@ -56,6 +56,20 @@ function App() {
     const metalnessTexture = textureLoader.load(metalness)
     const roughnessTexture = textureLoader.load(roughness)
 
+    // colorTexture.repeat.x = 2
+    // colorTexture.repeat.y = 3
+    // colorTexture.wrapS = THREE.MirroredRepeatWrapping
+    // colorTexture.wrapT = THREE.RepeatWrapping
+
+    // colorTexture.offset.x = 0.5
+    // colorTexture.offset.y = 0.5
+
+    colorTexture.rotation = Math.PI * 0.25
+    // Need to move the center point
+    colorTexture.center.x = 0.5
+    colorTexture.center.y = 0.5
+
+
     /*
      * Base
      */
@@ -64,6 +78,7 @@ function App() {
 
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
+    console.log(geometry.attributes.uv)
     const material = new THREE.MeshBasicMaterial({
       map: colorTexture,
     })
