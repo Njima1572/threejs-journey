@@ -28,28 +28,47 @@ function App() {
     const canvas = document.querySelector('canvas.webgl')
     const scene = new THREE.Scene()
 
-    const group = new THREE.Group()
-    scene.add(group)
+    // const group = new THREE.Group()
+    // scene.add(group)
 
-    const cube1 = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    )
-    const cube2 = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-    )
-    const cube3 = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0x0000ff })
-    )
+    // const cube1 = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1, 1, 1, 2, 2, 3),
+    //   new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+    // )
+    // const cube2 = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1, 1, 1),
+    //   new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+    // )
+    // const cube3 = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1, 1, 1),
+    //   new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
+    // )
+    // cube2.position.x = -2
+    // cube3.position.x = 2
 
-    cube2.position.x = -2
-    cube3.position.x = 2
+    // group.add(cube1)
+    // group.add(cube2)
+    // group.add(cube3)
 
-    group.add(cube1)
-    group.add(cube2)
-    group.add(cube3)
+    const geometry = new THREE.BufferGeometry()
+    const count = 50
+    // 3 coordinates for 3 points
+    const positionsArray = new Float32Array(count * 3 * 3)
+
+    for (let i = 0; i < count * 3 * 3; i++) {
+      positionsArray[i] = (Math.random() - 0.5) * 4
+    }
+
+    const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
+    geometry.setAttribute("position", positionsAttribute)
+
+
+    const material = new THREE.MeshBasicMaterial({ color: 0xff2233, wireframe: true })
+    const mesh = new THREE.Mesh(geometry, material)
+    scene.add(mesh)
+
+
+
 
 
     // First argument is field of view, 180 it will break
@@ -59,7 +78,7 @@ function App() {
     // Dont use extreme values. They introduce z-fighting
     const camera = new THREE.PerspectiveCamera(80, aspectRatio, 0.1, 100)
     camera.position.z = 3
-    camera.lookAt(group.position)
+    // camera.lookAt(group.position)
     scene.add(camera)
 
 
