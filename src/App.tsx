@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
 import gsap from 'gsap'
 import color from './static/textures/door/color.jpg'
+import minecraft from './static/textures/minecraft.png'
 import alpha from './static/textures/door/alpha.jpg'
 import height from './static/textures/door/height.jpg'
 import normal from './static/textures/door/normal.jpg'
@@ -48,7 +49,8 @@ function App() {
     }
 
     const textureLoader = new THREE.TextureLoader(loadingManager)
-    const colorTexture = textureLoader.load(color)
+    // const colorTexture = textureLoader.load(color)
+    const colorTexture = textureLoader.load(minecraft)
     const alphaTexture = textureLoader.load(alpha)
     const heightTexture = textureLoader.load(height)
     const normalTexture = textureLoader.load(normal)
@@ -64,10 +66,14 @@ function App() {
     // colorTexture.offset.x = 0.5
     // colorTexture.offset.y = 0.5
 
-    colorTexture.rotation = Math.PI * 0.25
+    // colorTexture.rotation = Math.PI * 0.25
     // Need to move the center point
-    colorTexture.center.x = 0.5
-    colorTexture.center.y = 0.5
+    // colorTexture.center.x = 0.5
+    // colorTexture.center.y = 0.5
+
+    // Very Sharp
+    // colorTexture.minFilter = THREE.NearestFilter
+    colorTexture.magFilter = THREE.NearestFilter
 
 
     /*
