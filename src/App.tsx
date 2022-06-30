@@ -1,5 +1,5 @@
 import "./App.css"
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
@@ -8,11 +8,11 @@ import gsap from 'gsap'
 function App() {
 
   useEffect(() => {
-
-    const gui = new dat.GUI()
     const debugObject = {
-      color: "#0xff0000"
+      color: "#ff0000",
+      spin: () => { },
     }
+
 
     const sizes = {
       width: window.innerWidth,
@@ -58,13 +58,9 @@ function App() {
     // group.add(cube3)
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ color: 0xff2233, wireframe: true })
+    const material = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true })
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
-
-
-
-
 
     // First argument is field of view, 180 it will break
     // Second argument is aspect ratio
@@ -137,6 +133,10 @@ function App() {
        * Debug
        */
       // TODO: Remove it from useEffect, it is running multiple times
+      const gui = new dat.GUI()
+      debugObject.spin = () => {
+        gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + 10 })
+      }
       gui.add(mesh.position, "x").min(-3).max(3).step(0.01).name("Reb blob x")
       gui.add(mesh.position, "y", -3, 3, 0.01)
       gui.add(mesh.position, "z", -3, 3, 0.01)
@@ -144,12 +144,13 @@ function App() {
       gui.add(mesh, "visible")
       gui.add(material, "wireframe")
 
-      console.log(debugObject)
+      gui.addColor(debugObject, "color").onChange((newColor) => {
+        console.log(newColor)
+        debugObject.color = newColor
+        material.color.set(newColor)
+      })
 
-      // gui.addColor(debugObject, "color").onChange(() => {
-      //   console.log("Changed Color!")
-      // })
-
+      gui.add(debugObject, 'spin')
 
       const tick = () => {
         const elapsedTime = clock.getElapsedTime()
