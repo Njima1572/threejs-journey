@@ -2,11 +2,18 @@ import "./App.css"
 import { useEffect } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as dat from 'dat.gui';
 import gsap from 'gsap'
 
 function App() {
 
   useEffect(() => {
+
+    const gui = new dat.GUI()
+    const debugObject = {
+      color: "#0xff0000"
+    }
+
     const sizes = {
       width: window.innerWidth,
       height: window.innerHeight
@@ -50,19 +57,7 @@ function App() {
     // group.add(cube2)
     // group.add(cube3)
 
-    const geometry = new THREE.BufferGeometry()
-    const count = 50
-    // 3 coordinates for 3 points
-    const positionsArray = new Float32Array(count * 3 * 3)
-
-    for (let i = 0; i < count * 3 * 3; i++) {
-      positionsArray[i] = (Math.random() - 0.5) * 4
-    }
-
-    const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
-    geometry.setAttribute("position", positionsAttribute)
-
-
+    const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ color: 0xff2233, wireframe: true })
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
@@ -137,6 +132,23 @@ function App() {
         }
 
       })
+
+      /*
+       * Debug
+       */
+      // TODO: Remove it from useEffect, it is running multiple times
+      gui.add(mesh.position, "x").min(-3).max(3).step(0.01).name("Reb blob x")
+      gui.add(mesh.position, "y", -3, 3, 0.01)
+      gui.add(mesh.position, "z", -3, 3, 0.01)
+
+      gui.add(mesh, "visible")
+      gui.add(material, "wireframe")
+
+      console.log(debugObject)
+
+      // gui.addColor(debugObject, "color").onChange(() => {
+      //   console.log("Changed Color!")
+      // })
 
 
       const tick = () => {
