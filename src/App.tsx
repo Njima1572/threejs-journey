@@ -5,6 +5,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
 import gsap from 'gsap'
 import color from './static/textures/door/color.jpg'
+import alpha from './static/textures/door/alpha.jpg'
+import height from './static/textures/door/height.jpg'
+import normal from './static/textures/door/normal.jpg'
+import ambientOcclusion from './static/textures/door/ambientOcclusion.jpg'
+import metalness from './static/textures/door/metalness.jpg'
+import roughness from './static/textures/door/roughness.jpg'
 
 function App() {
   useEffect(() => {
@@ -24,19 +30,31 @@ function App() {
     /*
      * Textures
      */
-    const textureLoader = new THREE.TextureLoader()
-    const texture = textureLoader.load(
-      color,
-      () => {
-        console.log("load")
-      },
-      () => {
-        console.log("progress")
-      },
-      () => {
-        console.log("error")
-      }
-    )
+    const loadingManager = new THREE.LoadingManager()
+
+    loadingManager.onStart = () => {
+      console.log("onStart")
+    }
+
+    loadingManager.onLoad = () => {
+      console.log("onLoad")
+    }
+
+    loadingManager.onProgress = () => {
+      console.log("onProgress")
+    }
+    loadingManager.onError = () => {
+      console.log("onError")
+    }
+
+    const textureLoader = new THREE.TextureLoader(loadingManager)
+    const colorTexture = textureLoader.load(color)
+    const alphaTexture = textureLoader.load(alpha)
+    const heightTexture = textureLoader.load(height)
+    const normalTexture = textureLoader.load(normal)
+    const ambientOcclusionTexture = textureLoader.load(ambientOcclusion)
+    const metalnessTexture = textureLoader.load(metalness)
+    const roughnessTexture = textureLoader.load(roughness)
 
     /*
      * Base
@@ -46,7 +64,9 @@ function App() {
 
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ map: texture })
+    const material = new THREE.MeshBasicMaterial({
+      map: colorTexture,
+    })
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
 
