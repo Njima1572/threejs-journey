@@ -27,13 +27,8 @@ function App() {
     /*
      * Textures
      */
-    const image = new Image()
-    const texture = new THREE.Texture(image)
-    image.onload = () => {
-      texture.needsUpdate = true
-    }
-
-    image.src = color
+    const textureLoader = new THREE.TextureLoader()
+    const texture = textureLoader.load(color)
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ map: texture })
