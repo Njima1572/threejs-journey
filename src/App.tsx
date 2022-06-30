@@ -21,14 +21,29 @@ function App() {
 
     const aspectRatio = sizes.width / sizes.height
 
-    const canvas = document.querySelector('canvas.webgl')
-    const scene = new THREE.Scene()
-
     /*
      * Textures
      */
     const textureLoader = new THREE.TextureLoader()
-    const texture = textureLoader.load(color)
+    const texture = textureLoader.load(
+      color,
+      () => {
+        console.log("load")
+      },
+      () => {
+        console.log("progress")
+      },
+      () => {
+        console.log("error")
+      }
+    )
+
+    /*
+     * Base
+     */
+    const canvas = document.querySelector('canvas.webgl')
+    const scene = new THREE.Scene()
+
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshBasicMaterial({ map: texture })
