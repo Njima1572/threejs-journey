@@ -14,6 +14,7 @@ import metalness from './static/textures/door/metalness.jpg'
 import roughness from './static/textures/door/roughness.jpg'
 import matcapMaterial from './static/textures/matcaps/8.png'
 import gradientMaterial from './static/textures/gradients/3.jpg'
+// import ambient
 
 function App() {
   const [gui, setGui] = useState(new dat.GUI())
@@ -148,6 +149,7 @@ function App() {
       material
     )
     sphere.position.x = -1.5
+    sphere.geometry.setAttribute('uv2', new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2))
 
     scene.add(sphere)
 
@@ -155,12 +157,14 @@ function App() {
       new THREE.PlaneGeometry(1, 1),
       material
     )
+    plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
     scene.add(plane)
 
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.3, 0.2, 16, 32),
       material
     )
+    torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
     torus.position.x = 1.5
     scene.add(torus)
 
