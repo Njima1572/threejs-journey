@@ -4,22 +4,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
 import gsap from 'gsap'
-import color from './static/textures/door/color.jpg'
-import minecraft from './static/textures/minecraft.png'
-import alpha from './static/textures/door/alpha.jpg'
-import height from './static/textures/door/height.jpg'
-import normal from './static/textures/door/normal.jpg'
-import ambientOcclusion from './static/textures/door/ambientOcclusion.jpg'
-import metalness from './static/textures/door/metalness.jpg'
-import roughness from './static/textures/door/roughness.jpg'
-import matcapMaterial from './static/textures/matcaps/8.png'
-import gradientMaterial from './static/textures/gradients/3.jpg'
-import environmentMaterialnz from './static/textures/environmentMaps/1/nz.jpg'
-import environmentMaterialpx from './static/textures/environmentMaps/1/px.jpg'
-import environmentMaterialnx from './static/textures/environmentMaps/1/nx.jpg'
-import environmentMaterialpy from './static/textures/environmentMaps/1/py.jpg'
-import environmentMaterialny from './static/textures/environmentMaps/1/ny.jpg'
-import environmentMaterialpz from './static/textures/environmentMaps/1/pz.jpg'
 
 function App() {
   const [gui, setGui] = useState(new dat.GUI())
@@ -57,51 +41,6 @@ function App() {
       console.log("onError")
     }
 
-    const textureLoader = new THREE.TextureLoader(loadingManager)
-
-    const colorTexture = textureLoader.load(minecraft)
-    const doorColorTexture = textureLoader.load(color)
-    const doorAlphaTexture = textureLoader.load(alpha)
-    const doorHeightTexture = textureLoader.load(height)
-    const doorNormalTexture = textureLoader.load(normal)
-    const doorAmbientOcclusionTexture = textureLoader.load(ambientOcclusion)
-    const doorMetalnessTexture = textureLoader.load(metalness)
-    const doorRoughnessTexture = textureLoader.load(roughness)
-    const matcapTexture = textureLoader.load(matcapMaterial)
-    const gradientTexture = textureLoader.load(gradientMaterial)
-
-    const cubeTextureLoader = new THREE.CubeTextureLoader()
-    const environmentMapTexture = cubeTextureLoader.load([
-      environmentMaterialpx,
-      environmentMaterialnx,
-      environmentMaterialpy,
-      environmentMaterialny,
-      environmentMaterialpz,
-      environmentMaterialnz,
-    ])
-
-
-    // colorTexture.repeat.x = 2
-    // colorTexture.repeat.y = 3
-    // colorTexture.wrapS = THREE.MirroredRepeatWrapping
-    // colorTexture.wrapT = THREE.RepeatWrapping
-
-    // colorTexture.offset.x = 0.5
-    // colorTexture.offset.y = 0.5
-
-    // colorTexture.rotation = Math.PI * 0.25
-    // Need to move the center point
-    // colorTexture.center.x = 0.5
-    // colorTexture.center.y = 0.5
-
-    // Very Sharp
-    // colorTexture.minFilter = THREE.NearestFilter
-    // for minFilter == NearestFilter, mipmap is not needed
-    // This would save some memory, but render might be heavier?
-    // colorTexture.generateMipmaps = false
-    colorTexture.magFilter = THREE.NearestFilter
-
-
     /*
      * Base
      */
@@ -112,69 +51,9 @@ function App() {
     /**
      * Object
      */
-    // Normals can be used for lighting, reflection, refraction, etc...
-    // const material = new THREE.MeshNormalMaterial()
-    // Shows the faces
-    // material.flatShading = true
-
-    // Matcaps includes lighting and reflection
-    // Mapped to object's normals
-    // const material = new THREE.MeshMatcapMaterial()
-    // material.matcap = matcapTexture
-
-    // white if close, black if far
-    // const material = new THREE.MeshDepthMaterial()
-
-    // This reacts to light
-    // const material = new THREE.MeshLambertMaterial()
-
-    // Also see the light refrection
-    // const material = new THREE.MeshPhongMaterial()
-    // material.shininess = 1000
-    // material.specular = new THREE.Color(0x00ff00)
-
-    // gradientTexture.minFilter = THREE.NearestFilter
-    // gradientTexture.magFilter = THREE.NearestFilter
-    // gradientTexture.generateMipmaps = false
-    // const material = new THREE.MeshToonMaterial()
-    // material.gradientMap = gradientTexture
-
-    // Like Lamberst and Phong, but adds metalness and roughness
-    // const material = new THREE.MeshStandardMaterial()
-    // material.map = doorColorTexture
-    // material.aoMap = doorAmbientOcclusionTexture
-    // material.aoMapIntensity = 1
-    // material.displacementMap = doorHeightTexture
-    // material.displacementScale = 0.05
-    // material.metalnessMap = doorMetalnessTexture
-    // material.roughnessMap = doorRoughnessTexture
-    // material.normalMap = doorNormalTexture
-    // material.normalScale.set(0.5, 0.5);
-    // material.alphaMap = doorAlphaTexture
-    // material.transparent = true
 
     const material = new THREE.MeshStandardMaterial()
-    material.metalness = 0.40
-    material.roughness = 0.60
 
-    material.envMap = environmentMapTexture
-
-
-    gui.add(material, 'metalness').min(0).max(1).step(0.0001)
-    gui.add(material, 'roughness').min(0).max(1).step(0.0001)
-    gui.add(material, 'aoMapIntensity').min(0).max(10).step(0.01)
-    gui.add(material, 'displacementScale').min(0).max(1).step(0.001)
-
-    // const material = new THREE.MeshBasicMaterial()
-    // material.map = doorColorTexture
-    // material.color = 'red' // This does not work
-    // material.color = new THREE.Color("yellow")
-    // material.wireframe = true
-
-    // material.transparent = true // this needs to be true for opacity / alphamap
-    // material.opacity = 0.5
-    // material.alphaMap = doorAlphaTexture
-    //
     material.side = THREE.DoubleSide
 
     const sphere = new THREE.Mesh(
