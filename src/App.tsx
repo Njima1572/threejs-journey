@@ -12,6 +12,8 @@ import normal from './static/textures/door/normal.jpg'
 import ambientOcclusion from './static/textures/door/ambientOcclusion.jpg'
 import metalness from './static/textures/door/metalness.jpg'
 import roughness from './static/textures/door/roughness.jpg'
+import matcapMaterial from './static/textures/matcaps/8.png'
+import gradientMaterial from './static/textures/gradients/3.jpg'
 
 function App() {
   const [gui, setGui] = useState(new dat.GUI())
@@ -58,8 +60,9 @@ function App() {
     const doorAmbientOcclusionTexture = textureLoader.load(ambientOcclusion)
     const doorMetalnessTexture = textureLoader.load(metalness)
     const doorRoughnessTexture = textureLoader.load(roughness)
-    const matcapTexture = textureLoader.load("./static/textures/matcaps/1.png")
-    const gradientTexture = textureLoader.load("./static/textures/gradients/3.jpg")
+    const matcapTexture = textureLoader.load(matcapMaterial)
+    const gradientTexture = textureLoader.load(gradientMaterial)
+
 
     // colorTexture.repeat.x = 2
     // colorTexture.repeat.y = 3
@@ -92,15 +95,53 @@ function App() {
     /**
      * Object
      */
-    const material = new THREE.MeshBasicMaterial()
+    // Normals can be used for lighting, reflection, refraction, etc...
+    // const material = new THREE.MeshNormalMaterial()
+    // Shows the faces
+    // material.flatShading = true
+
+    // Matcaps includes lighting and reflection
+    // Mapped to object's normals
+    // const material = new THREE.MeshMatcapMaterial()
+    // material.matcap = matcapTexture
+
+    // white if close, black if far
+    // const material = new THREE.MeshDepthMaterial()
+
+    // This reacts to light
+    // const material = new THREE.MeshLambertMaterial()
+
+    // Also see the light refrection
+    // const material = new THREE.MeshPhongMaterial()
+    // material.shininess = 1000
+    // material.specular = new THREE.Color(0x00ff00)
+
+    // gradientTexture.minFilter = THREE.NearestFilter
+    // gradientTexture.magFilter = THREE.NearestFilter
+    // gradientTexture.generateMipmaps = false
+    // const material = new THREE.MeshToonMaterial()
+    // material.gradientMap = gradientTexture
+
+    // Like Lamberst and Phong, but adds metalness and roughness
+    const material = new THREE.MeshStandardMaterial()
+    material.metalness = 0.40
+    material.roughness = 0.60
     material.map = doorColorTexture
+
+    gui.add(material, 'metalness').min(0).max(1).step(0.0001)
+    gui.add(material, 'roughness').min(0).max(1).step(0.0001)
+
+    // const material = new THREE.MeshBasicMaterial()
+    // material.map = doorColorTexture
     // material.color = 'red' // This does not work
-    material.color = new THREE.Color("yellow")
+    // material.color = new THREE.Color("yellow")
     // material.wireframe = true
-    
-    material.transparent = true // this needs to be true for opacity / alphamap
+
+    // material.transparent = true // this needs to be true for opacity / alphamap
     // material.opacity = 0.5
-    material.alphaMap = doorAlphaTexture
+    // material.alphaMap = doorAlphaTexture
+    //
+    material.side = THREE.DoubleSide
 
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 16, 16),
@@ -122,6 +163,20 @@ function App() {
     )
     torus.position.x = 1.5
     scene.add(torus)
+
+    /**
+     * Lights
+     */
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    scene.add(ambientLight)
+
+    const pointLight = new THREE.PointLight(0xffffff, 0.5)
+    pointLight.position.x = 2
+    pointLight.position.x = 3
+    pointLight.position.x = 4
+
+    scene.add(pointLight)
 
     // First argument is field of view, 180 it will break
     // Second argument is aspect ratio
@@ -201,7 +256,7 @@ function App() {
       gui.add(sphere.position, "z", -3, 3, 0.01)
 
       gui.add(sphere, "visible")
-      gui.add(material, "wireframe")
+      // gui.add(material, "wireframe")
 
       gui.addColor(debugObject, "color").onChange((newColor) => {
         debugObject.color = newColor
@@ -216,6 +271,10 @@ function App() {
         sphere.rotation.y = 0.1 * elapsedTime
         torus.rotation.y = 0.1 * elapsedTime
         plane.rotation.y = 0.1 * elapsedTime
+
+        sphere.rotation.x = 0.15 * elapsedTime
+        torus.rotation.x = 0.15 * elapsedTime
+        plane.rotation.x = 0.15 * elapsedTime
 
         // updateCamera
         // camera.rotation.y = cursor.x
