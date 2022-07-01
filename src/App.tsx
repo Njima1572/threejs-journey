@@ -125,12 +125,22 @@ function App() {
 
     // Like Lamberst and Phong, but adds metalness and roughness
     const material = new THREE.MeshStandardMaterial()
-    material.metalness = 0.40
-    material.roughness = 0.60
+    // material.metalness = 0.40
+    // material.roughness = 0.60
     material.map = doorColorTexture
+    material.aoMap = doorAmbientOcclusionTexture
+    material.aoMapIntensity = 1
+    material.displacementMap = doorHeightTexture
+    material.displacementScale = 0.05
+    material.metalnessMap = doorMetalnessTexture
+    material.roughnessMap = doorRoughnessTexture
+    material.normalMap = doorNormalTexture
 
-    gui.add(material, 'metalness').min(0).max(1).step(0.0001)
-    gui.add(material, 'roughness').min(0).max(1).step(0.0001)
+
+    // gui.add(material, 'metalness').min(0).max(1).step(0.0001)
+    // gui.add(material, 'roughness').min(0).max(1).step(0.0001)
+    gui.add(material, 'aoMapIntensity').min(0).max(10).step(0.01)
+    gui.add(material, 'displacementScale').min(0).max(1).step(0.001)
 
     // const material = new THREE.MeshBasicMaterial()
     // material.map = doorColorTexture
@@ -145,7 +155,7 @@ function App() {
     material.side = THREE.DoubleSide
 
     const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5, 16, 16),
+      new THREE.SphereGeometry(0.5, 64, 64),
       material
     )
     sphere.position.x = -1.5
@@ -154,14 +164,14 @@ function App() {
     scene.add(sphere)
 
     const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(1, 1),
+      new THREE.PlaneGeometry(1, 1, 64, 64),
       material
     )
     plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
     scene.add(plane)
 
     const torus = new THREE.Mesh(
-      new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+      new THREE.TorusGeometry(0.3, 0.2, 64, 128),
       material
     )
     torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
