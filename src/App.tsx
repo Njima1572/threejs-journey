@@ -91,8 +91,11 @@ function App() {
     const material = new THREE.MeshBasicMaterial({
       map: colorTexture,
     })
-    const mesh = new THREE.Mesh(geometry, material)
-    scene.add(mesh)
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(3, 16, 16),
+      material
+    )
+    scene.add(sphere)
 
     // First argument is field of view, 180 it will break
     // Second argument is aspect ratio
@@ -101,7 +104,6 @@ function App() {
     // Dont use extreme values. They introduce z-fighting
     const camera = new THREE.PerspectiveCamera(80, aspectRatio, 0.1, 100)
     camera.position.z = 3
-    // camera.lookAt(group.position)
     scene.add(camera)
 
 
@@ -167,13 +169,13 @@ function App() {
       // TODO: Remove it from useEffect, it is running multiple times
       const gui = new dat.GUI()
       debugObject.spin = () => {
-        gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + 10 })
+        gsap.to(sphere.rotation, { duration: 1, y: sphere.rotation.y + 10 })
       }
-      gui.add(mesh.position, "x").min(-3).max(3).step(0.01).name("Reb blob x")
-      gui.add(mesh.position, "y", -3, 3, 0.01)
-      gui.add(mesh.position, "z", -3, 3, 0.01)
+      gui.add(sphere.position, "x").min(-3).max(3).step(0.01).name("Reb blob x")
+      gui.add(sphere.position, "y", -3, 3, 0.01)
+      gui.add(sphere.position, "z", -3, 3, 0.01)
 
-      gui.add(mesh, "visible")
+      gui.add(sphere, "visible")
       gui.add(material, "wireframe")
 
       gui.addColor(debugObject, "color").onChange((newColor) => {
@@ -193,8 +195,6 @@ function App() {
         // camera.position.x = Math.sin(cursor.x * amplitude) * 3
         // camera.position.y = cursor.y * 5
         // camera.position.z = Math.cos(cursor.x * amplitude) * 3
-        // camera.lookAt(group.position)
-        // group.position.x = Math.cos(elapsedTime * Math.PI / 4)
 
         // Update controls
         controls.update()
