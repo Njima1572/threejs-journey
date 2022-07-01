@@ -14,7 +14,12 @@ import metalness from './static/textures/door/metalness.jpg'
 import roughness from './static/textures/door/roughness.jpg'
 import matcapMaterial from './static/textures/matcaps/8.png'
 import gradientMaterial from './static/textures/gradients/3.jpg'
-// import ambient
+import environmentMaterialnz from './static/textures/environmentMaps/1/nz.jpg'
+import environmentMaterialpx from './static/textures/environmentMaps/1/px.jpg'
+import environmentMaterialnx from './static/textures/environmentMaps/1/nx.jpg'
+import environmentMaterialpy from './static/textures/environmentMaps/1/py.jpg'
+import environmentMaterialny from './static/textures/environmentMaps/1/ny.jpg'
+import environmentMaterialpz from './static/textures/environmentMaps/1/pz.jpg'
 
 function App() {
   const [gui, setGui] = useState(new dat.GUI())
@@ -53,6 +58,7 @@ function App() {
     }
 
     const textureLoader = new THREE.TextureLoader(loadingManager)
+
     const colorTexture = textureLoader.load(minecraft)
     const doorColorTexture = textureLoader.load(color)
     const doorAlphaTexture = textureLoader.load(alpha)
@@ -63,6 +69,16 @@ function App() {
     const doorRoughnessTexture = textureLoader.load(roughness)
     const matcapTexture = textureLoader.load(matcapMaterial)
     const gradientTexture = textureLoader.load(gradientMaterial)
+
+    const cubeTextureLoader = new THREE.CubeTextureLoader()
+    const environmentMapTexture = cubeTextureLoader.load([
+      environmentMaterialpx,
+      environmentMaterialnx,
+      environmentMaterialpy,
+      environmentMaterialny,
+      environmentMaterialpz,
+      environmentMaterialnz,
+    ])
 
 
     // colorTexture.repeat.x = 2
@@ -124,21 +140,28 @@ function App() {
     // material.gradientMap = gradientTexture
 
     // Like Lamberst and Phong, but adds metalness and roughness
+    // const material = new THREE.MeshStandardMaterial()
+    // material.map = doorColorTexture
+    // material.aoMap = doorAmbientOcclusionTexture
+    // material.aoMapIntensity = 1
+    // material.displacementMap = doorHeightTexture
+    // material.displacementScale = 0.05
+    // material.metalnessMap = doorMetalnessTexture
+    // material.roughnessMap = doorRoughnessTexture
+    // material.normalMap = doorNormalTexture
+    // material.normalScale.set(0.5, 0.5);
+    // material.alphaMap = doorAlphaTexture
+    // material.transparent = true
+
     const material = new THREE.MeshStandardMaterial()
-    // material.metalness = 0.40
-    // material.roughness = 0.60
-    material.map = doorColorTexture
-    material.aoMap = doorAmbientOcclusionTexture
-    material.aoMapIntensity = 1
-    material.displacementMap = doorHeightTexture
-    material.displacementScale = 0.05
-    material.metalnessMap = doorMetalnessTexture
-    material.roughnessMap = doorRoughnessTexture
-    material.normalMap = doorNormalTexture
+    material.metalness = 0.40
+    material.roughness = 0.60
+
+    material.envMap = environmentMapTexture
 
 
-    // gui.add(material, 'metalness').min(0).max(1).step(0.0001)
-    // gui.add(material, 'roughness').min(0).max(1).step(0.0001)
+    gui.add(material, 'metalness').min(0).max(1).step(0.0001)
+    gui.add(material, 'roughness').min(0).max(1).step(0.0001)
     gui.add(material, 'aoMapIntensity').min(0).max(10).step(0.01)
     gui.add(material, 'displacementScale').min(0).max(1).step(0.001)
 
