@@ -14,6 +14,7 @@ import metalness from './static/textures/door/metalness.jpg'
 import roughness from './static/textures/door/roughness.jpg'
 
 function App() {
+  const [gui, setGui] = useState(new dat.GUI())
   useEffect(() => {
     const debugObject = {
       color: "#ff0000",
@@ -49,14 +50,16 @@ function App() {
     }
 
     const textureLoader = new THREE.TextureLoader(loadingManager)
-    // const colorTexture = textureLoader.load(color)
     const colorTexture = textureLoader.load(minecraft)
-    const alphaTexture = textureLoader.load(alpha)
-    const heightTexture = textureLoader.load(height)
-    const normalTexture = textureLoader.load(normal)
-    const ambientOcclusionTexture = textureLoader.load(ambientOcclusion)
-    const metalnessTexture = textureLoader.load(metalness)
-    const roughnessTexture = textureLoader.load(roughness)
+    const doorColorTexture = textureLoader.load(color)
+    const doorAlphaTexture = textureLoader.load(alpha)
+    const doorHeightTexture = textureLoader.load(height)
+    const doorNormalTexture = textureLoader.load(normal)
+    const doorAmbientOcclusionTexture = textureLoader.load(ambientOcclusion)
+    const doorMetalnessTexture = textureLoader.load(metalness)
+    const doorRoughnessTexture = textureLoader.load(roughness)
+    const matcapTexture = textureLoader.load("./static/textures/matcaps/1.png")
+    const gradientTexture = textureLoader.load("./static/textures/gradients/3.jpg")
 
     // colorTexture.repeat.x = 2
     // colorTexture.repeat.y = 3
@@ -86,16 +89,34 @@ function App() {
     const scene = new THREE.Scene()
 
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
-    console.log(geometry.attributes.uv)
-    const material = new THREE.MeshBasicMaterial({
-      map: colorTexture,
-    })
+    /**
+     * Object
+     */
+    const material = new THREE.MeshBasicMaterial()
+    material.map = doorColorTexture
+    // material.color = 'red' // This does not work
+    material.color = new THREE.Color("red")
+
     const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(3, 16, 16),
+      new THREE.SphereGeometry(0.5, 16, 16),
       material
     )
+    sphere.position.x = -1.5
+
     scene.add(sphere)
+
+    const plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 1),
+      material
+    )
+    scene.add(plane)
+
+    const torus = new THREE.Mesh(
+      new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+      material
+    )
+    torus.position.x = 1.5
+    scene.add(torus)
 
     // First argument is field of view, 180 it will break
     // Second argument is aspect ratio
@@ -167,7 +188,6 @@ function App() {
        * Debug
        */
       // TODO: Remove it from useEffect, it is running multiple times
-      const gui = new dat.GUI()
       debugObject.spin = () => {
         gsap.to(sphere.rotation, { duration: 1, y: sphere.rotation.y + 10 })
       }
@@ -187,6 +207,10 @@ function App() {
 
       const tick = () => {
         const elapsedTime = clock.getElapsedTime()
+
+        sphere.rotation.y = 0.1 * elapsedTime
+        torus.rotation.y = 0.1 * elapsedTime
+        plane.rotation.y = 0.1 * elapsedTime
 
         // updateCamera
         // camera.rotation.y = cursor.x
