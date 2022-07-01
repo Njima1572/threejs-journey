@@ -1,8 +1,12 @@
 import "./App.css"
 import { useState, useEffect } from 'react'
 import * as THREE from 'three'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
+import typefaceFont from 'three/examples/fonts/helvetiker_regular.typeface.json'
+console.log(typefaceFont)
 import gsap from 'gsap'
 
 function App() {
@@ -20,6 +24,12 @@ function App() {
     }
 
     const aspectRatio = sizes.width / sizes.height
+
+    /*
+     * Base
+     */
+    const canvas = document.querySelector('canvas.webgl')
+    const scene = new THREE.Scene()
 
     /*
      * Textures
@@ -41,11 +51,40 @@ function App() {
       console.log("onError")
     }
 
+
+
+
     /*
-     * Base
+     * Fonts
      */
-    const canvas = document.querySelector('canvas.webgl')
-    const scene = new THREE.Scene()
+    const fontLoader = new FontLoader()
+    const font = fontLoader.parse(typefaceFont)
+    const textGeometry = new TextGeometry(
+      "Hello Three.js",
+      {
+        font: font,
+        size: 0.5,
+        height: 0.2,
+        curveSegments: 5,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.02,
+        bevelOffset: 0,
+        bevelSegments: 3
+      }
+    )
+
+    textGeometry.computeBoundingBox()
+    console.log(textGeometry.boundingBox)
+
+
+    const textMaterial = new THREE.MeshBasicMaterial()
+    textMaterial.wireframe = true
+    const text = new THREE.Mesh(
+      textGeometry,
+      textMaterial
+    )
+    scene.add(text)
 
 
     /**
@@ -63,14 +102,14 @@ function App() {
     sphere.position.x = -1.5
     sphere.geometry.setAttribute('uv2', new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2))
 
-    scene.add(sphere)
+    // scene.add(sphere)
 
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(1, 1, 64, 64),
       material
     )
     plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
-    scene.add(plane)
+    // scene.add(plane)
 
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(0.3, 0.2, 64, 128),
@@ -78,7 +117,7 @@ function App() {
     )
     torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
     torus.position.x = 1.5
-    scene.add(torus)
+    // scene.add(torus)
 
     /**
      * Lights
