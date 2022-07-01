@@ -95,7 +95,12 @@ function App() {
     const material = new THREE.MeshBasicMaterial()
     material.map = doorColorTexture
     // material.color = 'red' // This does not work
-    material.color = new THREE.Color("red")
+    material.color = new THREE.Color("yellow")
+    // material.wireframe = true
+    
+    material.transparent = true // this needs to be true for opacity / alphamap
+    // material.opacity = 0.5
+    material.alphaMap = doorAlphaTexture
 
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 16, 16),
