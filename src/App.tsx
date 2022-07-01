@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
 import typefaceFont from 'three/examples/fonts/helvetiker_regular.typeface.json'
-import matcapMaterial from './static/textures/matcaps/1.png'
+import matcapMaterial from './static/textures/matcaps/4.png'
 import gsap from 'gsap'
 
 function App() {
@@ -90,11 +90,11 @@ function App() {
 
     const matcapTexture = textureLoader.load(matcapMaterial)
 
-    const textMaterial = new THREE.MeshMatcapMaterial()
-    textMaterial.matcap = matcapTexture
+    const material = new THREE.MeshMatcapMaterial()
+    material.matcap = matcapTexture
     const text = new THREE.Mesh(
       textGeometry,
-      textMaterial
+      material
     )
     scene.add(text)
 
@@ -102,7 +102,7 @@ function App() {
      * Object
      */
 
-    const material = new THREE.MeshStandardMaterial()
+    // const material = new THREE.MeshStandardMaterial()
 
     material.side = THREE.DoubleSide
 
@@ -129,11 +129,12 @@ function App() {
     torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
     torus.position.x = 1.5
     // scene.add(torus)
+    //
+    console.time('donuts')
+    const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
 
     for (let i = 0; i < 100; i++) {
-      const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
-      const donutMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-      const donut = new THREE.Mesh(donutGeometry, donutMaterial)
+      const donut = new THREE.Mesh(donutGeometry, material)
 
       donut.position.x = (Math.random() - 0.5) * 10
       donut.position.y = (Math.random() - 0.5) * 10
@@ -147,6 +148,7 @@ function App() {
       scene.add(donut)
 
     }
+    console.timeEnd('donuts')
 
 
     /**
