@@ -73,6 +73,9 @@ function App() {
 
     // Very Sharp
     // colorTexture.minFilter = THREE.NearestFilter
+    // for minFilter == NearestFilter, mipmap is not needed
+    // This would save some memory, but render might be heavier?
+    // colorTexture.generateMipmaps = false
     colorTexture.magFilter = THREE.NearestFilter
 
 
