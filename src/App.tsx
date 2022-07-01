@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as dat from 'dat.gui';
 import typefaceFont from 'three/examples/fonts/helvetiker_regular.typeface.json'
-console.log(typefaceFont)
+import matcapMaterial from './static/textures/matcaps/1.png'
 import gsap from 'gsap'
 
 function App() {
@@ -57,6 +57,7 @@ function App() {
     /*
      * Fonts
      */
+    const textureLoader = new THREE.TextureLoader(loadingManager)
     const fontLoader = new FontLoader()
     const font = fontLoader.parse(typefaceFont)
     const textGeometry = new TextGeometry(
@@ -76,16 +77,26 @@ function App() {
 
     textGeometry.computeBoundingBox()
     console.log(textGeometry.boundingBox)
+    // if (textGeometry.boundingBox) {
+    //   textGeometry.translate(
+    //     -(textGeometry.boundingBox.min.x + textGeometry.boundingBox.max.x) * 0.5,
+    //     -(textGeometry.boundingBox.min.y + textGeometry.boundingBox.max.y) * 0.5,
+    //     -(textGeometry.boundingBox.min.z + textGeometry.boundingBox.max.z) * 0.5,
+    //   )
+    // }
+    textGeometry.center()
+    textGeometry.computeBoundingBox()
+    console.log(textGeometry.boundingBox)
 
+    const matcapTexture = textureLoader.load(matcapMaterial)
 
-    const textMaterial = new THREE.MeshBasicMaterial()
-    textMaterial.wireframe = true
+    const textMaterial = new THREE.MeshMatcapMaterial()
+    textMaterial.matcap = matcapTexture
     const text = new THREE.Mesh(
       textGeometry,
       textMaterial
     )
     scene.add(text)
-
 
     /**
      * Object
@@ -118,6 +129,25 @@ function App() {
     torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
     torus.position.x = 1.5
     // scene.add(torus)
+
+    for (let i = 0; i < 100; i++) {
+      const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 32, 64)
+      const donutMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
+      const donut = new THREE.Mesh(donutGeometry, donutMaterial)
+
+      donut.position.x = (Math.random() - 0.5) * 10
+      donut.position.y = (Math.random() - 0.5) * 10
+      donut.position.z = (Math.random() - 0.5) * 10
+      donut.rotation.x = Math.random() * Math.PI
+      donut.rotation.y = Math.random() * Math.PI
+
+      const scale = Math.random()
+      donut.scale.set(scale, scale, scale)
+
+      scene.add(donut)
+
+    }
+
 
     /**
      * Lights
